@@ -12,15 +12,10 @@ import java.io.IOException;
 @WebServlet("/delete")
 public class deleteUserServlet extends HttpServlet {
 
-    private final UserDAO userStorage = UserDAO.init();
+    private final UserDAO userDAO = UserDAO.init();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/home.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
 
         if(username == null || username.isBlank()) {
@@ -28,14 +23,15 @@ public class deleteUserServlet extends HttpServlet {
             return;
         }
 
-        if(!userStorage.findByUsername(username)) {
+        if(!userDAO.findByUsername(username)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "This user is not exist");
             return;
         }
-        if(userStorage.deleteUser(username))
+        if(userDAO.deleteUser(username))
             req.setAttribute("message", "The user has been deleted");
         else
             req.setAttribute("message", "The user has not been deleted");
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }
+
 }

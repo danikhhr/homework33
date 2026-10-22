@@ -13,32 +13,42 @@ import java.io.IOException;
 @WebServlet("/add")
 public class addUserServlet extends HttpServlet {
 
-    UserDAO userStorage = UserDAO.init();
+    UserDAO userDAO = UserDAO.init();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       req.getRequestDispatcher("/home.jsp").forward(req, resp);
-    }
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp)
+            throws ServletException, IOException {
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("name");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        if(name == null || name.isBlank() ||
-        username == null || username.isBlank() ||
-        password == null || password.isBlank()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Empty value");
+        if (name == null && username == null && password == null) {
+            req.getRequestDispatcher("/home.jsp").forward(req, resp);
             return;
         }
 
-        if(userStorage.findByUsername(username)) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User with this username already exists");
+        if (name == null || name.isBlank() ||
+                username == null || username.isBlank() ||
+                password == null || password.isBlank()) {
+
+            resp.sendError(
+                    HttpServletResponse.SC_BAD_REQUEST,
+                    "Empty value"
+            );
             return;
         }
 
-        userStorage.addUser(new User(name, username, password));
+        if (userDAO.findByUsername(username)) {
+            resp.sendError(
+                    HttpServletResponse.SC_BAD_REQUEST,
+                    "User with this username already exists"
+            );
+            return;
+        }
+
+        userDAO.addUser(new User(name, username, password));
         req.setAttribute("message", "The user has been added");
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }

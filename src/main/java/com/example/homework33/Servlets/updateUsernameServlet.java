@@ -16,16 +16,11 @@ public class updateUsernameServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/home.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String oldUsername = req.getParameter("oldUsername");
         String newUsername = req.getParameter("newUsername");
 
         if(oldUsername == null || oldUsername.isBlank() ||
-                 newUsername== null || newUsername.isBlank()) {
+                newUsername== null || newUsername.isBlank()) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "empty value");
             return;
         }
@@ -41,4 +36,5 @@ public class updateUsernameServlet extends HttpServlet {
             req.setAttribute("message", "The username has not been updated");
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }
+
 }

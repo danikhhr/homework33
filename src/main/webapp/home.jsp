@@ -61,7 +61,7 @@
     <!-- ФОРМА ДОБАВЛЕНИЯ -->
     <div class="collapse mt-3" id="addUserForm">
         <div class="card card-body">
-            <form method="post" action="${pageContext.request.contextPath}/add">
+            <form method="get" action="${pageContext.request.contextPath}/add">
                 <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
                     <label for="add-name" class="form-label mb-0">Name:</label>
                     <input type="text" class="form-control w-auto" id="add-name" name="name" placeholder="name" required>
@@ -78,10 +78,10 @@
         </div>
     </div>
 
-    <!-- ФОРМА УДАЛЕНИЯ (Исправлена лишняя запятая в атрибутах div!) -->
+    <!-- ФОРМА УДАЛЕНИЯ -->
     <div class="collapse mt-3" id="deleteUserForm">
         <div class="card card-body">
-            <form method="post" action="${pageContext.request.contextPath}/delete">
+            <form method="get" action="${pageContext.request.contextPath}/delete">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <label for="delete-username" class="form-label mb-0">Enter username:</label>
                     <input type="text" class="form-control w-auto" id="delete-username" name="username" placeholder="username" required>
@@ -112,7 +112,7 @@
     <!-- ФОРМА ОБНОВЛЕНИЯ ПОЛЬЗОВАТЕЛЕЙ ПО USERNAME -->
     <div class="collapse mt-3" id="updateUserByUsernameForm">
         <div class="card card-body">
-            <form method="post" action="${pageContext.request.contextPath}/update-username">
+            <form method="get" action="${pageContext.request.contextPath}/update-username">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <label for="upgrade-username" class="form-label mb-0">Enter username:</label>
                     <input type="text" class="form-control w-auto" id="upgrade-username" name="oldUsername" placeholder="old username" required>
@@ -126,7 +126,6 @@
 
 </div>
 
-<!-- Подключение JS Bootstrap 5.3.3 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
