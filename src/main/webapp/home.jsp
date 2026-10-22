@@ -95,7 +95,7 @@
     <div class="collapse mt-3" id="printUsersForm">
         <div class="card card-body">
             <h5>Список пользователей:</h5>
-            <a href="${pageContext.request.contextPath}/find" class="btn btn-sm btn-outline-secondary">
+            <a href="${pageContext.request.contextPath}/findAll" class="btn btn-sm btn-outline-secondary">
                 Обновить
             </a>
             <c:if test="${not empty users}">
@@ -112,7 +112,7 @@
     <!-- ФОРМА ОБНОВЛЕНИЯ ПОЛЬЗОВАТЕЛЕЙ ПО USERNAME -->
     <div class="collapse mt-3" id="updateUserByUsernameForm">
         <div class="card card-body">
-            <form method="get" action="${pageContext.request.contextPath}/update-username">
+            <form method="get" action="${pageContext.request.contextPath}/upgrade-username">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <label for="upgrade-username" class="form-label mb-0">Enter username:</label>
                     <input type="text" class="form-control w-auto" id="upgrade-username" name="oldUsername" placeholder="old username" required>

@@ -1,24 +1,27 @@
-package com.example.homework33.Servlets;
+package com.example.homework33.Controller;
 
-import com.example.homework33.Model.User;
 import com.example.homework33.DAO.UserDAO;
+import com.example.homework33.Model.User;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/add")
-public class addUserServlet extends HttpServlet {
+public class AddUserController implements Controller{
 
-    UserDAO userDAO = UserDAO.init();
+    private final UserDAO userDAO;
+
+    public AddUserController(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
-    protected void doGet(HttpServletRequest req,
-                         HttpServletResponse resp)
-            throws ServletException, IOException {
+    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(!req.getMethod().equalsIgnoreCase("GET")){
+            resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            return;
+        }
 
         String name = req.getParameter("name");
         String username = req.getParameter("username");

@@ -8,20 +8,10 @@ import java.util.List;
 
 public class UserDAO {
 
-    private static UserDAO userStorage;
-
-    private UserDAO() {}
-
-    public static UserDAO init() {
-        if(userStorage == null)
-            userStorage = new UserDAO();
-        return userStorage;
-    }
-
     public void addUser(User user) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres", "postgres");
+                    "postgres", "root");
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users" +
                     "(name, username, password) VALUES (?, ?, ?)");
             preparedStatement.setString(1, user.getName());
@@ -37,7 +27,7 @@ public class UserDAO {
         List<User> users = new ArrayList<>();
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres", "postgres");
+                    "postgres", "root");
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "SELECT * FROM users"
             );
@@ -66,7 +56,7 @@ public class UserDAO {
             Connection connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/postgres",
                     "postgres",
-                    "postgres"
+                    "root"
             );
 
             PreparedStatement preparedStatement =
@@ -88,7 +78,7 @@ public class UserDAO {
     public boolean deleteUser(String username) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres", "postgres");
+                    "postgres", "root");
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "DELETE FROM users WHERE username = ?"
             );
@@ -101,21 +91,42 @@ public class UserDAO {
         }
     }
 
-    public boolean updateUsername(String oldUsername, String newUsername) {
+
+    public boolean updateUsername(String oldUsername,
+                                  String newUsername) {
+
+        String sql = "UPDATE users SET username = ? WHERE username = ?";
+
         try {
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres", "postgres");
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE users SET username = ? WHERE username = ?"
+            Class.forName("org.postgresql.Driver");
+            System.out.println("PostgreSQL DRIVER LOADED");
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(
+                    "PostgreSQL JDBC driver not found", e
             );
-            preparedStatement.setString(1, newUsername);
-            preparedStatement.setString(2, oldUsername);
-            int result = preparedStatement.executeUpdate();
+        }
+
+        try (Connection connection = DriverManager.getConnection(
+                "jdbc:postgresql://localhost:5432/postgres",
+                "postgres",
+                "root"
+        );
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(1, newUsername);
+            statement.setString(2, oldUsername);
+
+            int result = statement.executeUpdate();
+
             return result > 0;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
 
 }
