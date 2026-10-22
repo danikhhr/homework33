@@ -35,7 +35,7 @@ public class updateUsernameServlet extends HttpServlet {
             return;
         }
 
-        if (userStorage.updatePassword(oldUsername, newUsername))
+        if (userStorage.updateUsername(oldUsername, newUsername))
             req.setAttribute("message", "The username has been updated");
         else
             req.setAttribute("message", "The username has not been updated");

@@ -21,7 +21,7 @@ public class UserDAO {
     public void addUser(User user) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres", "root");
+                    "postgres", "postgres");
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users" +
                     "(name, username, password) VALUES (?, ?, ?)");
             preparedStatement.setString(1, user.getName());
@@ -37,7 +37,7 @@ public class UserDAO {
         List<User> users = new ArrayList<>();
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres", "root");
+                    "postgres", "postgres");
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "SELECT * FROM users"
             );
@@ -66,7 +66,7 @@ public class UserDAO {
             Connection connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/postgres",
                     "postgres",
-                    "root"
+                    "postgres"
             );
 
             PreparedStatement preparedStatement =
@@ -88,12 +88,14 @@ public class UserDAO {
     public boolean deleteUser(String username) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres", "root");
+                    "postgres", "postgres");
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "DELETE * FROM users WHERE username = ?"
+                    "DELETE FROM users WHERE username = ?"
             );
             preparedStatement.setString(1, username);
-            return preparedStatement.execute();
+            int resultSet = preparedStatement.executeUpdate();
+            return resultSet > 0;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -101,30 +103,19 @@ public class UserDAO {
 
     public boolean updateUsername(String oldUsername, String newUsername) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres");
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
+                    "postgres", "postgres");
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "UPDATE users SET username = ? WHERE username = ?"
             );
             preparedStatement.setString(1, newUsername);
             preparedStatement.setString(2, oldUsername);
-            return preparedStatement.execute();
+            int result = preparedStatement.executeUpdate();
+            return result > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean updatePassword(String oldPassword, String newPassword) {
-        try {
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres", "root");
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE users SET password = ? WHERE password = ?"
-            );
-            preparedStatement.setString(1, newPassword);
-            preparedStatement.setString(2, oldPassword);
-            return preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }
